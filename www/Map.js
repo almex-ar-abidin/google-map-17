@@ -89,8 +89,6 @@ Map.prototype.getMap = function(meta, div, options) {
     args = [meta];
   options = options || {};
 
-  self.set('clickablePOI', true)  // Current POI are clickable by default
-  
   self.set('clickable', options.clickable === false ? false : true);
   self.set('visible', options.visible === false ? false : true);
 
@@ -1586,17 +1584,6 @@ Map.prototype._onCameraEvent = function(eventName, cameraPosition) {
   if (this._isReady) {
     this.trigger(eventName, cameraPosition, this);
   }
-};
-
-Map.prototype.setClickablePOI = function(isClickable) {
-  var self = this;
-  isClickable = common.parseBoolean(isClickable);
-  self.set('clickablePOI', isClickable);
-  self.exec.call(self, null, self.errorHandler, this.__pgmId, 'setClickablePOI', [isClickable]);
-  return this;
-};
-Map.prototype.getClickablePOI = function() {
-  return this.get('clickablePOI');
 };
 
 module.exports = Map;
