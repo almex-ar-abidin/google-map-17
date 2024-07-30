@@ -16,8 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.content.PermissionChecker;
+import androidx.annotation.NonNull;
+import androidx.core.content.PermissionChecker;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -186,7 +186,10 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
       }
 
 
-      if (controls.has("myLocationButton") || controls.has("myLocation")) {
+      if (
+        (controls.has("myLocationButton") && controls.getBoolean("myLocationButton")) ||
+        (controls.has("myLocation") && controls.getBoolean("myLocation"))
+      ) {
 
         // Request geolocation permission.
         boolean locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
@@ -288,6 +291,12 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
         mapView.getMapAsync(new OnMapReadyCallback() {
           @Override
           public void onMapReady(GoogleMap googleMap) {
+
+            // Disable 3D Buildings, which interferes with tile overlays
+            // This is "working as intended": https://issuetracker.google.com/issues/205751273#comment5
+            // note this is configured here because there doesn't seem to be a GoogleMapOptions property to configure this
+            // before creating the map.
+            googleMap.setBuildingsEnabled(false);
 
             dummyMyLocationButton = new ImageView(activity);
             FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams((int)(48 * density), (int)(48 * density));
@@ -613,9 +622,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
       plugins.put(pluginName, pluginEntry);
       mapCtrl.pluginManager.addService(pluginEntry);
 
-      plugin.privateInitialize(pluginName, cordova, webView, null);
-
-      plugin.initialize(cordova, webView);
       ((MyPluginInterface)plugin).setPluginMap(PluginMap.this);
       MyPlugin myPlugin = (MyPlugin) plugin;
       myPlugin.self = (MyPlugin)plugin;
@@ -666,8 +672,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
       pluginMap = PluginMap.this;
       pluginMap.mapCtrl.pluginManager.addService(pluginEntry);
 
-      plugin.privateInitialize(className, cordova, webView, null);
-      plugin.initialize(cordova, webView);
       ((MyPluginInterface)plugin).setPluginMap(PluginMap.this);
       pluginEntry.plugin.execute("create", args, callbackContext);
 
@@ -1834,32 +1838,33 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
     final JSONObject params = args.getJSONObject(0);
 
-    boolean locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
-    //Log.d(TAG, "---> setMyLocationEnabled, hasPermission =  " + locationPermission);
-
-    if (!locationPermission) {
-      //_saveArgs = args;
-      //_saveCallbackContext = callbackContext;
-      synchronized (semaphore) {
-        cordova.requestPermissions(this, callbackContext.hashCode(), new String[]{
-            Manifest.permission.ACCESS_FINE_LOCATION
-        });
-        try {
-          semaphore.wait();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-      locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
-
-      //Log.d(TAG, "---> (1720)setMyLocationEnabled, hasPermission =  " + locationPermission);
+    if (params.getBoolean("myLocation") || params.getBoolean("myLocationButton")) {
+      boolean locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
+      //Log.d(TAG, "---> setMyLocationEnabled, hasPermission =  " + locationPermission);
 
       if (!locationPermission) {
-        callbackContext.error(PluginUtil.getPgmStrings(activity,"pgm_location_rejected_by_user"));
-        return;
-      }
+        //_saveArgs = args;
+        //_saveCallbackContext = callbackContext;
+        synchronized (semaphore) {
+          cordova.requestPermissions(this, callbackContext.hashCode(), new String[]{
+              Manifest.permission.ACCESS_FINE_LOCATION
+          });
+          try {
+            semaphore.wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
 
-    }
+        //Log.d(TAG, "---> (1720)setMyLocationEnabled, hasPermission =  " + locationPermission);
+
+        if (!locationPermission) {
+          callbackContext.error(PluginUtil.getPgmStrings(activity,"pgm_location_rejected_by_user"));
+          return;
+        }
+      }
+    };
 
     this.activity.runOnUiThread(new Runnable() {
       @SuppressLint("MissingPermission")
@@ -2290,16 +2295,16 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
           e.printStackTrace();
         }
         if (disableAutoPan) {
-          marker.showInfoWindow();
+          // marker.showInfoWindow();
           return true;
         } else {
-          marker.showInfoWindow();
+          // marker.showInfoWindow();
           return false;
         }
       }
     }
 
-    marker.showInfoWindow();
+    // marker.showInfoWindow();
     return true;
     //return false;
   }
