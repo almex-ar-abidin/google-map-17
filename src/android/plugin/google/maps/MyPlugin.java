@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class MyPlugin extends CordovaPlugin implements MyPluginInterface {
   public MyPlugin self = null;
   public final Map<String, Method> methods = new ConcurrentHashMap<String, Method>();
@@ -166,12 +167,6 @@ public class MyPlugin extends CordovaPlugin implements MyPluginInterface {
       return null;
     }
     return (Polyline)pluginMap.objects.get(id);
-  }
-  protected synchronized PluginTotalPaveTileLayer getTotalPaveTileLayer(String id) {
-    if (!pluginMap.objects.containsKey(id)) {
-      return null;
-    }
-    return (PluginTotalPaveTileLayer)pluginMap.objects.get(id);
   }
   protected synchronized Polygon getPolygon(String id) {
     if (!pluginMap.objects.containsKey(id)) {

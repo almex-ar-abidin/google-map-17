@@ -1,0 +1,20 @@
+2.8.1 - Quito CDVCommandDelegateImpl
+Ver: https://github.com/mapsplugin/cordova-plugin-googlemaps/issues/2923
+The problem is that the current version of this plugin uses the CDVCommandDelegateImpl class which has been changed from Public to Private in cordova-ios@7 
+so is no longer available for the plugin to use.
+
+3.0.2 - hago merge de multimap y de mi 3.0.1
+
+3.0.3 - PLUGIN INFO
+
+3.0.4 - Cambio en package.json el ID. (le agrego @chacabuk)
+"cordova": {
+    "id": "@chacabuk/cordova-plugin-googlemaps",
+
+
+3.0.5 - Cambio el ID en plugin.xml  (le agrego @chacabuk)
+<plugin id="@chacabuk/cordova-plugin-googlemaps"
+
+
+3.0.6 - Cambio el ID en plugin.xml  (le quito @chacabuk)
+<plugin id="cordova-plugin-googlemaps"

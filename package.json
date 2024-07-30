@@ -1,51 +1,21 @@
 {
-  "name": "cordova-plugin-googlemaps",
-  "version": "3.2.0-dev",
+  "name": "@chacabuk/cordova-plugin-googlemaps",
+  "version": "3.0.6",
   "description": "Google Maps native SDK for Android and iOS, and Google Maps JavaScript API v3 for browser.",
   "cordova": {
-    "id": "cordova-plugin-googlemaps",
+    "id": "@chacabuk/cordova-plugin-googlemaps",
     "platforms": [
       "android",
       "ios",
       "browser"
     ]
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.totalpave.com:48731"
+  "engines": {
+    "cordova-android": ">=5.1.0",
+    "cordova-ios": ">=5.1.1",
+    "apple-xcode": ">=10.0.0",
+    "apple-ios": ">=10.0.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mapsplugin/cordova-plugin-googlemaps.git"
-  },
-  "keywords": [
-    "google",
-    "maps",
-    "geo",
-    "google maps",
-    "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios",
-    "cordova-browser"
-  ],
-  "engines": [
-    {
-      "name": "cordova-android",
-      "version": ">=5.1.0"
-    },
-    {
-      "name": "cordova-ios",
-      "version": ">=5.1.1"
-    },
-    {
-      "name": "apple-xcode",
-      "version": ">=10.0.0"
-    },
-    {
-      "name": "apple-ios",
-      "version": ">=10.0.0"
-    }
-  ],
   "scripts": {
     "test": "jest && npm run eslint",
     "jest": "jest",
@@ -54,16 +24,12 @@
   },
   "author": "Masashi Katsumata, Hirbod Mirjavadi",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/mapsplugin/cordova-plugin-googlemaps/issues"
-  },
-  "homepage": "https://github.com/mapsplugin/cordova-plugin-googlemaps",
   "devDependencies": {
     "cordova-js": "^4.2.4",
     "eslint": "^5.7.0",
     "jest": "^23.6.0"
   },
   "dependencies": {
-    "cordova-common": "4.1.0"
+    "cordova-common": "^3.1.0"
   }
 }

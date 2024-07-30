@@ -1,5 +1,7 @@
+
 var utils = require('cordova/utils'),
   common = require('./Common'),
+  encoding = require('./encoding'),
   Overlay = require('./Overlay');
 
 /*****************************************************************************
@@ -74,8 +76,7 @@ var Polyline = function (map, polylineOptions, _exec) {
   self.on('strokeColor_changed', function () {
     if (self._isRemoved) return;
     var color = self.get('strokeColor');
-    self.exec.call(self, null, self.errorHandler, self.getPluginName(), 'setStrokeColor', [self.getId(), common.HTMLColor2RGBA(color)]);
-    // self.exec.call(self, null, self.errorHandler, self.getPluginName(), 'setStrokeColor', [self.getId(), common.HTMLColor2RGBA(color, 0.75)]);
+    self.exec.call(self, null, self.errorHandler, self.getPluginName(), 'setStrokeColor', [self.getId(), common.HTMLColor2RGBA(color, 0.75)]);
   });
 
 };
@@ -84,6 +85,9 @@ utils.extend(Polyline, Overlay);
 
 Polyline.prototype.setPoints = function (points) {
   var self = this;
+  if (typeof points === 'string') {
+    points = encoding.decodePath(points);;
+  }
   var mvcArray = self.points;
   mvcArray.empty(true);
 
