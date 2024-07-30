@@ -4,14 +4,14 @@
 //
 //  Created by Masashi Katsumata.
 //
-// ================================================================================================
-// TotalPave Modifications
-// - Renamed MainViewController.h -> ViewController.h
-// - Removed NSObjCRuntime.h import. Header was removed in iOS 11, the TotalPave min iOS is currently 13.
-// ================================================================================================
+//
 
+#ifndef MIN
+#import <NSObjCRuntime.h>
+#endif
 #import <Foundation/Foundation.h>
 #import <Cordova/CDV.h>
+#import "MainViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 //#import "MFGoogleMapAdditions/GMSCoordinateBounds+Geometry.h"
@@ -19,6 +19,8 @@
 #import <math.h>
 #import "IPluginProtocol.h"
 #import "PluginViewController.h"
+#import <Cordova/CDVCommandDelegate.h>
+#import <Cordova/CDVCommandDelegateImpl.h>
 
 typedef void (^MYCompletionHandler)(NSError *error);
 
@@ -45,6 +47,10 @@ typedef void (^MYCompletionHandler)(NSError *error);
 @interface UIImage (GoogleMapsPlugin)
 - (UIImage*)imageByApplyingAlpha:(CGFloat) alpha;
 - (UIImage *)resize:(CGFloat)width height:(CGFloat)height;
+@end
+
+@interface CDVCommandDelegateImpl (GoogleMapsPlugin)
+- (void)hookSendPluginResult:(CDVPluginResult*)result callbackId:(NSString*)callbackId;
 @end
 
 //

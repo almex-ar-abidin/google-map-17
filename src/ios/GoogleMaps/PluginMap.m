@@ -135,7 +135,16 @@
   self.mapCtrl.viewDepth = [[meta objectForKey:@"depth"] integerValue];
 
   NSDictionary *initOptions = [command.arguments objectAtIndex:1];
+  if ([initOptions valueForKey:@"camera"] && [initOptions valueForKey:@"camera"] != [NSNull null]) {
+    double delayInSeconds = 1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+      [self _setOptions:initOptions requestMethod:@"getMap" command:command];
+    });
+  } else {
     [self _setOptions:initOptions requestMethod:@"getMap" command:command];
+  }
+
 }
 
 
@@ -577,6 +586,25 @@
         [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
 
         [CATransaction setCompletionBlock:^{
+          if (self.isRemoved) {
+            return;
+          }
+          if (cameraBounds != nil){
+
+            GMSCameraPosition *cameraPosition2 = [GMSCameraPosition cameraWithLatitude:self.mapCtrl.map.camera.target.latitude
+                                                                             longitude:self.mapCtrl.map.camera.target.longitude
+                                                                                  zoom:self.mapCtrl.map.camera.zoom
+                                                                               bearing:bearing
+                                                                          viewingAngle:angle];
+
+            [self.mapCtrl.map setCamera:cameraPosition2];
+
+          } else {
+            if (bearing == 0) {
+              GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion:self.mapCtrl.map.projection.visibleRegion];
+              [self.mapCtrl.map cameraForBounds:bounds insets:paddingUiEdgeInsets];
+            }
+          }
           [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
 
@@ -634,12 +662,12 @@
     NSString *markerId = [command.arguments objectAtIndex:0];
     GMSMarker *marker = [self.mapCtrl.objects objectForKey:markerId];
     if (marker != nil) {
-      // self.mapCtrl.map.selectedMarker = marker;
+      self.mapCtrl.map.selectedMarker = marker;
       self.mapCtrl.activeMarker = marker;
     }
 
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [(CDVCommandDelegateImpl *)self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }];
 }
 

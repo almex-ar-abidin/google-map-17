@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-googlemaps" version="4.1.4" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-googlemaps" version="3.2.0-dev" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
   <name>cordova-plugin-googlemaps</name>
   <js-module name="Promise" src="www/Promise.js" />
   <js-module name="BaseClass" src="www/BaseClass.js">
@@ -130,8 +130,6 @@
     <engine name="apple-ios" version=">=10.0.0" />
   </engines>
 
-  <dependency id="@totalpave/cordova-plugin-tilegen" version="0.3.12" />
-
   <!-- android -->
   <platform name="android">
     <info>
@@ -231,6 +229,7 @@
     <resource-file src="src/android/frameworks/tbxml-android.aar" target="app/src/libs/tbxml-android.aar"/>
 
     <framework src="src/android/frameworks/pgm-custom.gradle" custom="true" type="gradleReference"/>
+    <framework src="totalpave:tilegen:0.2.5" />
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <meta-data android:name="com.google.android.geo.API_KEY" android:value="${GOOGLE_MAPS_ANDROID_API_KEY}"/>
@@ -286,6 +285,7 @@
 
   <!-- ios -->
   <platform name="ios">
+    <dependency id="@totalpave/cordova-plugin-tilegen" version="0.2.5" />
 
     <preference name="LOCATION_WHEN_IN_USE_DESCRIPTION" default="This app wants to get your location while this app runs only."/>
     <preference name="LOCATION_ALWAYS_USAGE_DESCRIPTION" default="This app wants to get your location always, even this app runs in background."/>
@@ -296,8 +296,6 @@
     <js-module name="js_CordovaGoogleMaps" src="www/js_CordovaGoogleMaps-for-android_ios.js">
       <runs/>
     </js-module>
-
-    <resource-file src="src/ios/GoogleMapsPrivacy.bundle" target="GoogleMapsPrivacy.bundle" />
 
     <info>
       Official document https://github.com/mapsplugin/cordova-plugin-googlemaps-doc/blob/master/v2.6.0/README.md Please consider to buy a beer for us 🍺 https://github.com/mapsplugin/cordova-plugin-googlemaps#buy-us-a-beer
@@ -473,7 +471,7 @@
             <source url="https://github.com/CocoaPods/Specs.git"/>
         </config>
         <pods>
-          <pod name="GoogleMaps" spec="8.4.0" />
+          <pod name="GoogleMaps" spec="7.4.0" />
         </pods>
     </podspec>
 

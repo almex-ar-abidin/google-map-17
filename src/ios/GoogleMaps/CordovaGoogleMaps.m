@@ -365,7 +365,10 @@
     ((GMSMapView *)(viewCtrl.view)).indoorDisplay.delegate = viewCtrl;
     [self.pluginLayer addPluginOverlay:viewCtrl];
 
-    [pluginMap getMap:command];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      [pluginMap getMap:command];
+    });
+
   });
 }
 

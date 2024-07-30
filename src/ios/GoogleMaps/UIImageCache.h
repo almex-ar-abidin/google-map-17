@@ -4,16 +4,11 @@
 //
 //  Created by Masashi Katsumata.
 //
-// ================================================================================================
-// TotalPave Modifications
-// - Added UIKit import as the TotalPave workflow will not adopt the global import.
-// ================================================================================================
-
+//
 #ifndef UIImageCache_h
 #define UIImageCache_h
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 @interface UIImageCache : NSObject
 

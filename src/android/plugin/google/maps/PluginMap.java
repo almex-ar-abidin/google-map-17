@@ -292,12 +292,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
           @Override
           public void onMapReady(GoogleMap googleMap) {
 
-            // Disable 3D Buildings, which interferes with tile overlays
-            // This is "working as intended": https://issuetracker.google.com/issues/205751273#comment5
-            // note this is configured here because there doesn't seem to be a GoogleMapOptions property to configure this
-            // before creating the map.
-            googleMap.setBuildingsEnabled(false);
-
             dummyMyLocationButton = new ImageView(activity);
             FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams((int)(48 * density), (int)(48 * density));
             lParams.gravity = Gravity.RIGHT;
@@ -2295,16 +2289,16 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
           e.printStackTrace();
         }
         if (disableAutoPan) {
-          // marker.showInfoWindow();
+          marker.showInfoWindow();
           return true;
         } else {
-          // marker.showInfoWindow();
+          marker.showInfoWindow();
           return false;
         }
       }
     }
 
-    // marker.showInfoWindow();
+    marker.showInfoWindow();
     return true;
     //return false;
   }

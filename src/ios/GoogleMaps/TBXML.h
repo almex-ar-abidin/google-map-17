@@ -26,12 +26,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 // ================================================================================================
-// TotalPave Modifications
-// - Added Foundation import as the TotalPave workflow will not adopt the global import.
-// ================================================================================================
 
 @class TBXML;
-#import <Foundation/Foundation.h>
 
 
 // ================================================================================================

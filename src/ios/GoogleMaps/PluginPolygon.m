@@ -95,6 +95,19 @@
         polygon.holes = holePaths;
       }
 
+      BOOL isVisible = YES;
+
+      // Visible property
+      NSString *visibleValue = [NSString stringWithFormat:@"%@",  json[@"visible"]];
+      if ([@"0" isEqualToString:visibleValue]) {
+        // false
+        isVisible = NO;
+        polygon.map = nil;
+      } else {
+        // true or default
+        polygon.map = self.mapCtrl.map;
+      }
+
       BOOL isClickable = NO;
       if ([[json valueForKey:@"clickable"] boolValue]) {
         isClickable = YES;
@@ -102,7 +115,6 @@
       if ([[json valueForKey:@"geodesic"] boolValue]) {
         polygon.geodesic = YES;
       }
-
       NSArray *rgbColor = [json valueForKey:@"fillColor"];
       polygon.fillColor = [rgbColor parsePluginColor];
 
@@ -120,18 +132,6 @@
       NSString *id = [NSString stringWithFormat:@"polygon_%@", idBase];
       [self.mapCtrl.objects setObject:polygon forKey: id];
       polygon.title = id;
-
-      BOOL isVisible = YES;
-      // Visible property
-      NSString *visibleValue = [NSString stringWithFormat:@"%@",  json[@"visible"]];
-      if ([@"0" isEqualToString:visibleValue]) {
-        // false
-        isVisible = NO;
-        polygon.map = nil;
-      } else {
-        // true or default
-        polygon.map = self.mapCtrl.map;
-      }
 
       // Run the below code on background thread.
       [self.mapCtrl.executeQueue addOperationWithBlock:^{

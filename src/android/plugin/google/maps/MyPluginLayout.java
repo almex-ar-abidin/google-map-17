@@ -116,25 +116,20 @@ public class MyPluginLayout extends FrameLayout implements ViewTreeObserver.OnSc
           }
         }
 
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) pluginOverlay.getView().getLayoutParams();
-        if (params == null) {
-          // Once the view is added to the view tree, getLayoutParams must not
-          // return null, thus a null params indicates that the view is not
-          // attached.
-          // https://developer.android.com/reference/android/view/View#getLayoutParams()
-          continue;
-        }
-
+        ViewGroup.LayoutParams lParams = pluginOverlay.getView().getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) lParams;
+        //Log.d("MyPluginLayout", "-->FrameLayout x = " + x + ", y = " + y + ", w = " + width + ", h = " + height);
         if (params.leftMargin == x && params.topMargin == y &&
                 params.width == width && params.height == height) {
           continue;
         }
-
         params.width = width;
         params.height = height;
         params.leftMargin = x;
         params.topMargin = y;
         pluginOverlay.getView().setLayoutParams(params);
+
+
       }
     }
   };

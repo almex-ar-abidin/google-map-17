@@ -110,19 +110,19 @@ NSString * const PROPERTY_PREFIX = @"totalpavetilelayer_property";
     }];
 }
 
-- (void) pluginUnload {
-    NSArray* keys = [self.mapCtrl.objects allKeys];
+- (void)pluginUnload {
+    NSArray *keys = [self.mapCtrl.objects allKeys];
+    NSString *key;
     for (int i = 0; i < [keys count]; i++) {
-        NSString* key = [keys objectAtIndex:i];
+        key = [keys objectAtIndex:i];
         if ([key hasPrefix:PREFIX]) {
             key = [key stringByReplacingOccurrencesOfString:@"_property" withString:@""];
-            TotalPaveTileProvider* provider = (TotalPaveTileProvider*)[self.mapCtrl.objects objectForKey:key];
+            TotalPaveTileProvider *provider = (TotalPaveTileProvider *)[self.mapCtrl.objects objectForKey:key];
             provider.map = nil;
             provider = nil;
         }
-
-        [self.mapCtrl.objects removeObjectForKey:key];
     }
+    [self.mapCtrl.objects removeObjectForKey:key];
 }
 
 - (void)setPluginViewController:(PluginViewController *)viewCtrl {
